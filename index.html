@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مقارنة فنية: Evologic مقابل Be</title>
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      line-height: 1.7;
+    }
+
+    /* ─── Hero ─── */
+    header {
+      background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+      color: #fff;
+      text-align: center;
+      padding: 56px 24px 48px;
+    }
+    header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 10px; }
+    header p  { font-size: 1.05rem; opacity: .85; max-width: 620px; margin: 0 auto; }
+
+    /* ─── Layout ─── */
+    main { max-width: 1100px; margin: 0 auto; padding: 40px 20px 60px; }
+
+    /* ─── Section titles ─── */
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2b6cb0;
+      margin: 48px 0 20px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid #bee3f8;
+    }
+
+    /* ─── Pricing Cards ─── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 32px 28px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+    }
+    .card.evologic::before { background: linear-gradient(90deg, #38a169, #68d391); }
+    .card.be::before        { background: linear-gradient(90deg, #d69e2e, #f6e05e); }
+
+    .card .company-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .card.evologic .company-name { color: #276749; }
+    .card.be        .company-name { color: #975a16; }
+
+    .card .price {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin: 10px 0 4px;
+    }
+    .card.evologic .price { color: #2f855a; }
+    .card.be        .price { color: #b7791f; }
+
+    .card .price-note { font-size: .85rem; color: #718096; margin-bottom: 20px; }
+
+    .card ul { list-style: none; }
+    .card ul li {
+      padding: 6px 0;
+      font-size: .95rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .card ul li::before {
+      content: '✓';
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .card.evologic ul li::before { color: #38a169; }
+    .card.be        ul li::before { color: #d69e2e; }
+
+    /* ─── Comparison Table ─── */
+    .table-wrap { overflow-x: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,.08); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: .93rem;
+    }
+    thead tr {
+      background: linear-gradient(135deg, #2b6cb0, #2c5282);
+      color: #fff;
+    }
+    thead th {
+      padding: 16px 18px;
+      text-align: right;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    tbody tr:nth-child(even) { background: #f7fafc; }
+    tbody tr:hover           { background: #ebf8ff; }
+    tbody td {
+      padding: 14px 18px;
+      vertical-align: top;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    tbody td:first-child { font-weight: 600; color: #2d3748; width: 22%; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: .8rem;
+      font-weight: 600;
+    }
+    .badge-green  { background: #c6f6d5; color: #276749; }
+    .badge-yellow { background: #fefcbf; color: #975a16; }
+    .badge-blue   { background: #bee3f8; color: #2c5282; }
+    .badge-red    { background: #fed7d7; color: #9b2c2c; }
+
+    /* ─── Pros / Cons ─── */
+    .pros-cons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .pc-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px 22px;
+      box-shadow: 0 3px 14px rgba(0,0,0,.07);
+    }
+    .pc-card h3 { font-size: 1.05rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .pc-card ul { list-style: none; }
+    .pc-card ul li {
+      padding: 5px 0;
+      font-size: .9rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+    }
+
+    /* pros */
+    .pc-pros h3 { color: #276749; }
+    .pc-pros ul li::before { content: '👍'; font-size: .85rem; }
+    /* cons */
+    .pc-cons h3 { color: #9b2c2c; }
+    .pc-cons ul li::before { content: '⚠️'; font-size: .85rem; }
+
+    /* ─── Recommendation ─── */
+    .recommendation {
+      background: linear-gradient(135deg, #ebf8ff, #e6fffa);
+      border-right: 5px solid #2b6cb0;
+      border-radius: 12px;
+      padding: 28px 28px 28px 24px;
+      margin-top: 12px;
+    }
+    .recommendation h3 { font-size: 1.15rem; color: #2b6cb0; margin-bottom: 10px; }
+    .recommendation p  { font-size: .97rem; color: #2d3748; }
+    .recommendation .highlight {
+      font-weight: 700;
+      color: #276749;
+    }
+
+    /* ─── Score Bar ─── */
+    .scores {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .score-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px 22px;
+      box-shadow: 0 3px 14px rgba(0,0,0,.07);
+    }
+    .score-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; }
+    .score-card.evologic h3 { color: #276749; }
+    .score-card.be        h3 { color: #975a16; }
+
+    .score-row { margin-bottom: 12px; }
+    .score-row .label {
+      display: flex;
+      justify-content: space-between;
+      font-size: .88rem;
+      color: #4a5568;
+      margin-bottom: 4px;
+    }
+    .bar-bg {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width .6s ease;
+    }
+    .score-card.evologic .bar-fill { background: linear-gradient(90deg, #38a169, #68d391); }
+    .score-card.be        .bar-fill { background: linear-gradient(90deg, #d69e2e, #f6e05e); }
+
+    /* ─── Footer ─── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: .85rem;
+      color: #718096;
+      border-top: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚖️ مقارنة فنية شاملة</h1>
+  <p>Evologic مقابل Be — تقييم تقني لأفضل عرض لبناء الموقع الإلكتروني</p>
+</header>
+
+<main>
+
+  <!-- ══════════ PRICING CARDS ══════════ -->
+  <h2 class="section-title">💰 ملخص العروض</h2>
+  <div class="cards">
+
+    <div class="card evologic">
+      <div class="company-name">🟢 Evologic</div>
+      <div class="price">$950</div>
+      <div class="price-note">USD — دفعة واحدة</div>
+      <ul>
+        <li>موقع حديث بـ React + Node.js</li>
+        <li>تكامل مع Odoo (Integration)</li>
+        <li>SEO أساسي (Basic SEO)</li>
+        <li>تصميم متجاوب مع الجوال</li>
+        <li>نظام إدارة محتوى</li>
+        <li>دعم فني لمدة شهر</li>
+      </ul>
+    </div>
+
+    <div class="card be">
+      <div class="company-name">🟡 Be</div>
+      <div class="price">$1,025.21</div>
+      <div class="price-note">USD — نفس المتطلبات المتفق عليها</div>
+      <ul>
+        <li>موقع مبني بـ PHP</li>
+        <li>تكامل مع Odoo (Integration)</li>
+        <li>SEO أساسي (Basic SEO)</li>
+        <li>تصميم متجاوب مع الجوال</li>
+        <li>نظام إدارة محتوى</li>
+        <li>دعم فني لمدة شهر</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ══════════ TECH COMPARISON TABLE ══════════ -->
+  <h2 class="section-title">🔍 مقارنة تقنية تفصيلية</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>المعيار</th>
+          <th>🟢 Evologic (React / Node.js)</th>
+          <th>🟡 Be (PHP)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>المكدّس التقني</td>
+          <td>React (Front-end) + Node.js / Express (Back-end)</td>
+          <td>PHP (Laravel أو مشابه) + MySQL</td>
+        </tr>
+        <tr>
+          <td>نموذج المعالجة</td>
+          <td>
+            <span class="badge badge-green">غير متزامن (Async / Non-blocking)</span>
+            <br/>أداء عالٍ تحت الحمل الثقيل
+          </td>
+          <td>
+            <span class="badge badge-yellow">متزامن تقليدي (Synchronous)</span>
+            <br/>مستقر وواسع الانتشار
+          </td>
+        </tr>
+        <tr>
+          <td>تكامل Odoo</td>
+          <td>
+            <span class="badge badge-green">ممتاز</span><br/>
+            Node.js يتواصل بسلاسة مع Odoo XML-RPC / REST API
+          </td>
+          <td>
+            <span class="badge badge-green">ممتاز</span><br/>
+            PHP يدعم Odoo XML-RPC بشكل ناضج ومختبر
+          </td>
+        </tr>
+        <tr>
+          <td>السيو (SEO)</td>
+          <td>
+            <span class="badge badge-blue">يحتاج SSR أو Next.js</span><br/>
+            React وحده لا يدعم SEO جيداً — يلزم Server-Side Rendering
+          </td>
+          <td>
+            <span class="badge badge-green">مدمج بطبيعته</span><br/>
+            PHP يُولّد HTML كاملاً من الخادم، مثالي للـ SEO
+          </td>
+        </tr>
+        <tr>
+          <td>سرعة التطوير</td>
+          <td>متوسطة — مكدّس حديث يتطلب خبرة في JS</td>
+          <td>سريع — نظام بيئي ناضج ومكتبات وافرة</td>
+        </tr>
+        <tr>
+          <td>قابلية التوسع</td>
+          <td>
+            <span class="badge badge-green">عالية</span><br/>
+            مناسب للتطبيقات التي تحتاج لحركة مرور كثيفة
+          </td>
+          <td>
+            <span class="badge badge-yellow">جيدة</span><br/>
+            يتوسع بشكل جيد مع Nginx / Caching المناسب
+          </td>
+        </tr>
+        <tr>
+          <td>الأمان</td>
+          <td>
+            <span class="badge badge-blue">متوسط-عالٍ</span><br/>
+            يحتاج إلى إعداد صحيح لـ CORS، JWT، Helmet
+          </td>
+          <td>
+            <span class="badge badge-blue">متوسط-عالٍ</span><br/>
+            نضج طويل — مخاطر معروفة ومعالجة في Frameworks
+          </td>
+        </tr>
+        <tr>
+          <td>صيانة الكود</td>
+          <td>
+            <span class="badge badge-green">ممتاز</span><br/>
+            فصل واضح Front/Back + TypeScript ممكن
+          </td>
+          <td>
+            <span class="badge badge-yellow">جيد</span><br/>
+            MVC راسخ لكن يمكن أن يتشعب بدون انضباط
+          </td>
+        </tr>
+        <tr>
+          <td>توافر المطورين</td>
+          <td>واسع — مجتمع ضخم لـ Node.js + React</td>
+          <td>أوسع — PHP مازال الأعلى استخداماً عالمياً</td>
+        </tr>
+        <tr>
+          <td>الاستضافة</td>
+          <td>VPS / Cloud (Heroku, Railway, AWS) — أغلى قليلاً</td>
+          <td>Shared Hosting رخيص متاح بكثرة</td>
+        </tr>
+        <tr>
+          <td>السعر</td>
+          <td><span class="badge badge-green">$950</span></td>
+          <td><span class="badge badge-yellow">$1,025.21</span></td>
+        </tr>
+        <tr>
+          <td>الفارق السعري</td>
+          <td colspan="2" style="text-align:center">
+            <span class="badge badge-blue">Evologic أرخص بـ $75.21 (~7.3%)</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════ SCORE BARS ══════════ -->
+  <h2 class="section-title">📊 التقييم العددي (من 10)</h2>
+  <div class="scores">
+
+    <div class="score-card evologic">
+      <h3>🟢 Evologic — React + Node.js</h3>
+
+      <div class="score-row">
+        <div class="label"><span>الأداء والسرعة</span><span>9/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="label"><span>تكامل Odoo</span><span>9/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="label"><span>SEO الطبيعي</span><span>6/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="label"><span>قابلية التوسع</span><span>9/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="label"><span>سهولة الصيانة</span><span>8/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:80%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="label"><span>القيمة مقابل السعر</span><span>9/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div>
+      </div>
+    </div>
+
+    <div class="score-card be">
+      <h3>🟡 Be — PHP</h3>
+
+      <div class="score-row">
+        <div class="label"><span>الأداء والسرعة</span><span>7/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="label"><span>تكامل Odoo</span><span>8/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:80%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="label"><span>SEO الطبيعي</span><span>9/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="label"><span>قابلية التوسع</span><span>7/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="label"><span>سهولة الصيانة</span><span>7/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="label"><span>القيمة مقابل السعر</span><span>7/10</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ PROS / CONS ══════════ -->
+  <h2 class="section-title">✅ المزايا والعيوب</h2>
+  <div class="pros-cons">
+
+    <div class="pc-card pc-pros">
+      <h3>🟢 مزايا Evologic (React / Node.js)</h3>
+      <ul>
+        <li>أداء فائق — Node.js يتعامل مع طلبات متزامنة كثيرة</li>
+        <li>واجهة مستخدم تفاعلية وحديثة مع React</li>
+        <li>سعر أقل ($75.21 توفيراً)</li>
+        <li>تكامل سلس مع Odoo REST API</li>
+        <li>مناسب للتوسع المستقبلي وإضافة تطبيق جوال</li>
+        <li>كود قابل لإعادة الاستخدام (مكونات React)</li>
+      </ul>
+    </div>
+
+    <div class="pc-card pc-cons">
+      <h3>⚠️ تحديات Evologic (React / Node.js)</h3>
+      <ul>
+        <li>SEO يحتاج إضافة SSR (Next.js) — تعقيد إضافي</li>
+        <li>يحتاج استضافة VPS أو Cloud (تكلفة شهرية أعلى)</li>
+        <li>منحنى تعلم أعلى للفريق إذا لم يكن خبير JS</li>
+        <li>الإعداد الأولي أبطأ من PHP</li>
+      </ul>
+    </div>
+
+    <div class="pc-card pc-pros">
+      <h3>🟡 مزايا Be (PHP)</h3>
+      <ul>
+        <li>SEO ممتاز بطبيعته (Server-Side HTML)</li>
+        <li>نضج تقني — PHP مستقر منذ عقود</li>
+        <li>استضافة رخيصة ومتاحة بكثرة</li>
+        <li>وفرة المطورين والدعم المجتمعي</li>
+        <li>تطوير أسرع في المراحل الأولى</li>
+      </ul>
+    </div>
+
+    <div class="pc-card pc-cons">
+      <h3>⚠️ تحديات Be (PHP)</h3>
+      <ul>
+        <li>سعر أعلى بـ $75.21 على نفس المتطلبات</li>
+        <li>أداء أقل تحت الحمل الثقيل مقارنة بـ Node.js</li>
+        <li>واجهة مستخدم أقل تفاعلية (تحتاج jQuery / Alpine)</li>
+        <li>قابلية توسع محدودة مقارنة بالمعمارية الحديثة</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ══════════ RECOMMENDATION ══════════ -->
+  <h2 class="section-title">🏆 التوصية النهائية</h2>
+  <div class="recommendation">
+    <h3>الاختيار الموصى به: <span class="highlight">Evologic ($950)</span></h3>
+    <p>
+      بناءً على التحليل الفني الشامل، <span class="highlight">Evologic</span> يُقدّم قيمة أعلى مقابل سعر أقل.
+      المكدّس التقني الحديث (React + Node.js) يضمن أداءً أفضل، قابلية توسع أكبر، وواجهة مستخدم
+      تفاعلية متميزة. التكامل مع Odoo سلس في كلا الخيارين، غير أن الفارق السعري ($75.21)
+      لصالح Evologic دون تنازل عن الجودة يجعله الخيار الأمثل.
+    </p>
+    <p style="margin-top:10px;">
+      <strong>ملاحظة مهمة:</strong> تأكد من أن Evologic ستستخدم
+      <strong>SSR (Server-Side Rendering)</strong> أو إطار مثل <strong>Next.js</strong>
+      لضمان SEO قوي، وذلك كشرط في العقد، لأن React وحدها لا تدعم SEO بشكل كافٍ.
+    </p>
+  </div>
+
+</main>
+
+<footer>
+  <p>تم إعداد هذه المقارنة بناءً على المعطيات التقنية المُقدَّمة — 2024</p>
+</footer>
+
+</body>
+</html>
